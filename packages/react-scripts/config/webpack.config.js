@@ -545,7 +545,12 @@ module.exports = function(webpackEnv) {
                   importLoaders: 2,
                   sourceMap: isEnvProduction && shouldUseSourceMap,
                 },
-                'less-loader'
+                {
+                  loader: 'less-loader',
+                  options: {
+                    javascriptEnabled: true
+                  }
+                }
               ),
             },
             // "file" loader makes sure those assets get served by WebpackDevServer.
