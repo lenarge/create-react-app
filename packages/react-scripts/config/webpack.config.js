@@ -79,7 +79,7 @@ module.exports = function(webpackEnv) {
   const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1));
 
   // common function to get style loaders
-  const getStyleLoaders = (cssOptions, preProcessor) => {
+  const getStyleLoaders = (cssOptions, preProcessor, preProcessorOptions) => {
     const loaders = [
       isEnvDevelopment && require.resolve('style-loader'),
       isEnvProduction && {
@@ -121,6 +121,7 @@ module.exports = function(webpackEnv) {
       },
     ].filter(Boolean);
     if (preProcessor) {
+      const options = Object.assign({}, preProcessorOptions || {}, { sourceMap: true })
       loaders.push(
         {
           loader: require.resolve('resolve-url-loader'),
@@ -130,9 +131,7 @@ module.exports = function(webpackEnv) {
         },
         {
           loader: require.resolve(preProcessor),
-          options: {
-            sourceMap: true,
-          },
+          options: options,
         }
       );
     }
@@ -545,11 +544,9 @@ module.exports = function(webpackEnv) {
                   importLoaders: 2,
                   sourceMap: isEnvProduction && shouldUseSourceMap,
                 },
+                'less-loader',
                 {
-                  loader: 'less-loader',
-                  options: {
-                    javascriptEnabled: true
-                  }
+                  javascriptEnabled: true
                 }
               ),
             },
